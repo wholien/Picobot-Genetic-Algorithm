@@ -1,0 +1,110 @@
+Final.txt
+
+
+
+How the genetic parameters were chosen and how code was tested:
+	What fraction of each population did was fit enough to mate?
+	
+	For every generation, programs that were above the average of the average fitness and the max fitness would go through to the next generation. 
+	I.E., any program with a fitness > (avg + max)/2
+
+	How did you arrange the mating and mutations?
+
+	For mating: the ones that automatically went to the next generation (those > avg. of avg. fitness and max fitness - (avg+max)/2) mated with random programs until our next generation has 200 programs. This is done by the function crossover() from the class Program.
+
+	Mutations: After adding all the programs that have a fitness of greater than the average of average fitness and max fitness, the algorithm starts adding crossovers between the automatically-passed-through programs (goodprogs) and random programs from all of the programs from last generation.
+	This is the first source of mutations. Then, every 15 programs added to the next generation will be mutated. This is done by the function mutate(),
+	also from the class Program. 
+
+Best program: 
+
+Fitness of fittest program is: 0.9985
+0 NExx -> W 4
+0 NxWx -> S 0
+0 Nxxx -> W 4
+0 xExS -> N 1
+0 xExx -> W 4
+0 xxWS -> E 3
+0 xxWx -> S 0
+0 xxxS -> N 3
+0 xxxx -> E 0
+1 NExx -> W 3
+1 NxWx -> E 3
+1 Nxxx -> E 4
+1 xExS -> N 1
+1 xExx -> W 4
+1 xxWS -> N 4
+1 xxWx -> N 3
+1 xxxS -> W 3
+1 xxxx -> W 1
+2 NExx -> W 1
+2 NxWx -> E 4
+2 Nxxx -> W 0
+2 xExS -> N 3
+2 xExx -> S 4
+2 xxWS -> N 3
+2 xxWx -> E 2
+2 xxxS -> E 3
+2 xxxx -> S 1
+3 NExx -> W 1
+3 NxWx -> E 1
+3 Nxxx -> E 1
+3 xExS -> W 1
+3 xExx -> S 1
+3 xxWS -> E 2
+3 xxWx -> E 0
+3 xxxS -> E 4
+3 xxxx -> W 2
+4 NExx -> W 2
+4 NxWx -> S 4
+4 Nxxx -> S 4
+4 xExS -> W 4
+4 xExx -> S 0
+4 xxWS -> N 0
+4 xxWx -> E 2
+4 xxxS -> E 2
+4 xxxx -> N 2
+
+(if started from the most upper right hand corner, it will cover 100% of the empty room)
+We started with an average fitness of .0536 and max fitness of .498 (gen 1)
+to 
+GENERATION 5
+
+
+The AVERAGE FITNESS for GENERATION 5 is   0.2426
+
+
+The MAX FITNESS for GENERATION 5 is 0.5631
+
+to 
+
+GENERATION 10
+
+
+The AVERAGE FITNESS for GENERATION 10 is   0.4392
+
+
+The MAX FITNESS for GENERATION 10 is 0.5951
+
+to 
+
+GENERATION 15
+
+
+The AVERAGE FITNESS for GENERATION 15 is   0.4811
+
+
+The MAX FITNESS for GENERATION 15 is 0.6357
+
+to
+
+GENERATION 20
+
+
+The AVERAGE FITNESS for GENERATION 20 is   0.5044
+
+
+The MAX FITNESS for GENERATION 20 is 0.9985
+
+
+	
