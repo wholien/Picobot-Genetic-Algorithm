@@ -2,19 +2,20 @@
 ##
 ###
 ####
-#    Andrew Meehan & Julien Chien 
+#    Andrew Meehan & Julien Chien
 ####
 ###
 ##
 #
 
 #   PROGRAM: Picobot Genetic Algorithm
-#   GOAL: 1) Simulate the picobot environment. Randomly produce 200 picobot programs with their own commands (gen 1)
-#         2) Pick the fittest programs from the previous generation and put them in the next generation. Then
+#   GOAL: 1) Simulate the picobot environment. Randomly produce 200 picobot
+#            programs with their own commands (gen 1)
+#         2) Pick the fittest programs from the previous generation and put them
+#            in the next generation. Then
 #            mate and mutate programs to fill up the next generation.
-#         3) Repeat until it is generation 20, where hopefully many programs can traverse the square picobot maze
-
-
+#         3) Repeat until it is generation 20, where hopefully many programs can
+#            traverse the square picobot maze
 
 import random
 
@@ -25,20 +26,17 @@ NUMSTATES = 5
 STEPS = 2250
 TRIALS = 50
 
-
-
 class Program:
-
     def __init__(self):
 
         self.rules = {}
         self.randomize()
-        
+
 
     def __repr__(self):
         keylist = self.rules.keys()
         keylist.sort()
-        
+
         s = ""
         for each_key in range(len(keylist)):
             s += str(keylist[each_key][0])
@@ -52,36 +50,40 @@ class Program:
         return s
 
     def randomize(self):
-        """generates a random full set of rules for the self.rules dictionary!"""
-        possible_surroundings = ['xxxx', 'Nxxx', 'NExx', 'NxWx', 'xxxS', 'xExS', 'xxWS', 'xExx', 'xxWx']
+        """generates a random full set of rules for the self.rules dictionary!
+        """
+        possible_surroundings = ['xxxx', 'Nxxx', 'NExx', 'NxWx', 'xxxS', 'xExS',
+                                 'xxWS', 'xExx', 'xxWx']
         movedirections = ['N', 'E', 'W', 'S']
         possible_states = range(NUMSTATES)
 
         for each_state in range(len(possible_states)):
 
             for each_surrounding in range(len(possible_surroundings)):
-                
+
                 movedir = random.choice(movedirections)
                 while movedir in possible_surroundings[each_surrounding]:
                     movedir = random.choice(movedirections)
 
                 movestate = random.choice(possible_states)
-                self.rules[(possible_states[each_state], possible_surroundings[each_surrounding])] = (movedir, movestate)
+                self.rules[(possible_states[each_state],
+                  possible_surroundings[each_surrounding])] =
+                       (movedir, movestate)
 
     def getMove(self, state, surroundings):
-        """get move takes and integerstate and a surrounding and returns a tuple that contains
-            the picobot's next move and new state
+        """get move takes and integerstate and a surrounding and returns a tuple
+           that contains the picobot's next move and new state
         """
         ans = self.rules[(state, surroundings)]
         return ans
 
 
     def mutate(self):
+        """mutates a single rule and state in the dictionary
         """
-        mutates a single rule and state in the dictionary
-        """
-        possible_surroundings = ['xxxx', 'Nxxx', 'NExx', 'NxWx', 'xxxS', 'xExS', 'xxWS', 'xExx', 'xxWx']
-        
+        possible_surroundings = ['xxxx', 'Nxxx', 'NExx', 'NxWx', 'xxxS', 'xExS',
+                                 'xxWS', 'xExx', 'xxWx']
+
         movedirections = ['N', 'E', 'W', 'S']
         currState = random.choice(range(5))
         mSurr = random.choice(possible_surroundings)
@@ -96,25 +98,25 @@ class Program:
 
     def crossover(self,other):
         """crosses the rules from 2 different programs using a random choice
-            takes all moves below and at the random state choice and adds them to a new dictionary
+           takes all moves below and at the random state choice and adds them
+           to a new dictionary
 
-            then takes all moves above the random state choice and adds moves from the 2nd program to
-                the new dictionary
-
-            sets self.rules as the new dictionary
+           then takes all moves above the random state choice and adds moves
+           from the 2nd program to the new dictionary sets self.rules as the new
+           dictionary
         """
-
-        topstate = random.choice(range(1,4))   #finds the highest state to take rules from p1
+        #finds the highest state to takerules from p1
+        topstate = random.choice(range(1,4))
         newrules = {}    #empty new rule dictionary
         keys1 = self.rules.keys()   #gets list of keys from self.rules
         keys1.sort()   #sorts list
         keys2 = other.rules.keys()   #same but for other program
         keys2.sort()     #sorts
-        
+
         for eachkey in range(len(keys1)):
             if keys1[eachkey][0] <= topstate:
                 newrules[keys1[eachkey]] = self.rules[(keys1[eachkey])]
-                
+
         for eachkey in range(len(keys2)):
             if keys2[eachkey][0] > topstate:
                 newrules[keys2[eachkey]] = other.rules[(keys2[eachkey])]
@@ -122,11 +124,8 @@ class Program:
         crossProg = Program()
         crossProg.rules = newrules
         return crossProg
-                
-                    
- 
-class World:
 
+class World:
     def __init__(self, initial_row, initial_col, program):
         self.prow = initial_row
         self.pcol = initial_col
@@ -137,8 +136,7 @@ class World:
         self.prog = program
         self.room = [ [' ']*WIDTH for row in range(HEIGHT)]
         self.room[self.prow][self.pcol] = 'P'
- 
-                        
+
     def __repr__(self):
         """
         returns the picobot board
@@ -151,23 +149,25 @@ class World:
         s += '+'
         s += '\n'
         for row in range( self.height ):
-            s += '| '   
-        
+            s += '| '
+
             for col in range( self.width ):
                 s += self.room[row][col]
             s += ' |\n'
 
-        s += '+'        
+        s += '+'
         s += '-'*(self.width+2)    # add the bottom of the board
         s += '+'
         s += '\n'
-        
+
         s += '\n'
         return s      # the board is complete, return it
 
     def getCurrentSurroundings(self):
 
-        """returns a string in the NExx format as corresponds to the bot's current surroundings"""
+        """returns a string in the NExx format as corresponds to the bot's
+           current surroundings
+        """
 
         csstring = ''
 
@@ -231,15 +231,10 @@ class World:
                         return
                 elif self.repeatChecker() == False and steps > 1:
                     steps = steps - 2
-            
-            
-            
 
     def fractionVisitedCells(self):
         """returns a float point fraction of cells in self.room that are marked
-
-             'o'/'P'
-
+           'o'/'P'
         """
         x=0
         for row in range(self.height):
@@ -252,10 +247,10 @@ class World:
 
     def repeatChecker(self):
         """This function is built to speed up the fitness testing so
-        picobot doesn't waste computer run time repeating abitrary steps in an
-        unfit program
+           picobot doesn't waste computer run time repeating abitrary steps in
+           an unfit program
         """
-        
+
         stateatMoment = self.state
         fracCells = self.fractionVisitedCells
         nextMove = self.getCurrentSurroundings()
@@ -268,14 +263,10 @@ class World:
         move2 = self.getCurrentSurroundings()
 
         if stateatMoment == state2 and fracCells == fracCellsNow and nextMove == move2:
-            
+
             return True
         else:
             return False
-        
-        
-        
-
 
 def evaluateFitness(program, TRIALS, STEPS):
     p = program
@@ -290,76 +281,6 @@ def evaluateFitness(program, TRIALS, STEPS):
     fitness = "%8.4f" % fitness
     fitness = float(fitness)
     return fitness
-
-
-"""   
-def GAxxxx(popsize, numgens):
-    s = '\n'
-    s += 'Fitness is measured using 50 random trials (50 different starting positions)'
-    s += '\n'
-    s += 'Each trial runs 1000 steps'
-    s += '\n'
-    s += 'Each generation has '
-    s += str(popsize)
-    s += ' programs and '
-    s += str(numgens)
-    print s
-
-    
-    d = genProgs(popsize)
-    picoRules = d.values()
-    progNames = d.keys()
-    while numgens > 0:
-        genList = []
-        fitList = []
-        gencounter = 1
-        for eachprog in range(popsize):
-            fitness = evaluateFitness(picoRules[eachprog], 50, 1000)
-            genList.append((fitness, progNames[eachprog]))
-        genList = sorted(genList)
-        LenGenList = len(genList)
-        if LenGenList != popsize:
-            print 'Error in LenGenList'
-        print genList
-
-        
-
-        maxFit = 0
-        for elements in range(len(genList)):
-            fitList.append(genList[elements][0])
-            if genList[elements][0] >= maxFit:
-                maxFit = genList[elements][0]
-
-        
-
-        aveFit = (sum(fitList)*1.0)/(len(fitList)*1.0)
-
-        
-
-        if maxFit != genList[-1][0]:
-            print 'maxFit function has a bug'
-        print '\n'
-        print '____ Generation ' + str(gencounter) + ' ____'
-        print '\n'
-        print 'The maximum fitness in this generation is ' + str(maxFit)
-        print '\n'
-        print 'The average fitness in this generation is ' + str(aveFit)
-        print '\n'
-        fitvals=[]
-        for x in fitList:
-            if x >= aveFit:
-                fitvals.append(x)
-                
-        for elements in genList:
-            if elements[0] < aveFit:
-                genList.remove(elements)
-                print genList
-        newLength = len(genList)
-
-        
-
-        break
-"""        
 
 def menu(numProgs, Generations):
     s = ''
@@ -393,35 +314,29 @@ def menu(numProgs, Generations):
 def GA(numProgramsperGen, Generations):
     s = menu(numProgramsperGen, Generations)
     print s
-    
-
 
     dictionary = genProgs(numProgramsperGen)
     picoRules = dictionary.values()
     programNames = dictionary.keys()
     picoRules.sort()
     programNames.sort()
-    #dictionary = sorted(dictionary)
-    #print dictionary
-    #print picoRules
-    #print programNames
 
     GenerationCounter = 1
     while GenerationCounter != (Generations+1):
-        
+
         fitEvaluated = []
-        
+
         for eachProgram in programNames:
             name = eachProgram
             rules = dictionary[name]
             fitness = evaluateFitness(rules, TRIALS, 3000)
             x = (fitness, name, rules)
             fitEvaluated.append(x)
-    
+
         fitEvaluated.sort()
-       
+
         maxFitness = max(fitEvaluated)[0]
-        
+
         SumFitness = 0
         for eachTuple in fitEvaluated:
             SumFitness += eachTuple[0]
@@ -448,25 +363,15 @@ def GA(numProgramsperGen, Generations):
         print '------------------------------------'
         print '\n'
         print '\n'
-        
 
         fitAvg = float(fitAvg)
-        
-#        dictionary2reproduce = {}
-#        withinTen = maxFitness * .9
-#        for eachTuple in fitEvaluated:
-#            if eachTuple[0] > withinTen:
-#                dictionary2reproduce[eachTuple[1]] = eachTuple[2]
-        
 
-        #dictionary = reproduce2(dictionary2reproduce, numProgramsperGen, fitEvaluated, fitAvg, maxFitness)
         dictionary = reproduce3(fitEvaluated, fitAvg, dictionary, maxFitness)
         programNames = dictionary.keys()
         picoRules = dictionary.values()
         picoRules.sort()
         programNames.sort()
         print 'Got the new dict'
-        #dictionary = sorted(dictionary)
 
         GenerationCounter += 1
 
@@ -483,7 +388,7 @@ def GA(numProgramsperGen, Generations):
                 fitList.append(fitness[0])
             totFit = sum(fitList)
             avgFinal = (totFit*1.0) / (numProgramsperGen * 1.0)
-            
+
             print 'The most fit program is: ' + str(fitEvaluated[-1][1]) + ' with a fitness of ' + str(maxfitness)
             print '\n'
             print 'The rules used by the most fit program are as follows: '
@@ -494,7 +399,7 @@ def GA(numProgramsperGen, Generations):
             print 'The average fitness for your genetic algorthim is: ' + str(avgFinal)
             print '\n'
             print '\n'
-            
+
             choice = raw_input('Would you like to run the program again?? (y/n): ')
             if choice.lower() == 'n' or choice.lower() == 'no':
                 return
@@ -503,13 +408,11 @@ def GA(numProgramsperGen, Generations):
                 numGens = input('How many generations would you like to produce?: ')
                 GA(numProgs,numGens)
 
-
-
 def reproduce3(fitEvaluated, avgFit, dictionary, maxFit):
     fitEvaluated.sort()
-    
+
     dictToReturn = {}
-    
+
     goodProgs = []
     listOfNames = []
     for eachTuple in fitEvaluated:
@@ -517,8 +420,7 @@ def reproduce3(fitEvaluated, avgFit, dictionary, maxFit):
         if eachTuple[0] > (((maxFit + avgFit)*1.0)/2.0):
             dictToReturn[eachTuple[1]]=eachTuple[2]
             goodProgs.append(eachTuple[1])
-    #print 'Made it here'
-    #print dictToReturn
+
     while len(dictToReturn) != len(dictionary):
         goodProg = dictionary[random.choice(goodProgs)]
         randomTuple = random.choice(fitEvaluated)
@@ -528,17 +430,12 @@ def reproduce3(fitEvaluated, avgFit, dictionary, maxFit):
         if len(dictToReturn) % 15 == 0:
             print 'Mutate!'
             progToAdd.mutate()
-    
+
         progName = str(genName(dictToReturn))
         dictToReturn[progName] = progToAdd
-        #print progToAdd
-        #print dictToReturn
 
     if len(dictToReturn) == len(dictionary):
-        #print 'We got a new dict!'
         return dictToReturn
-    
-        
 
 def genName(dictionary):
     names = dictionary.keys()
@@ -551,33 +448,37 @@ def genName(dictionary):
         newName = 'prog'+str(counter+1)
         counter += 1
     return newName
+
 def createNewGen(genList, aveFit):
-    """creates a new generation using the most fit programs from the previous generation"""
+    """creates a new generation using the most fit programs from the previous
+       generation
+    """
     d = {}
 
     counter = 0
 
     for eachprog in range(len(genList)):
         if genList[eachprog][0] >= aveFit:
-            d[genList[eachprog][1]] 
-    
+            d[genList[eachprog][1]]
 
 def genProgs(number_of_programs):
-    """this creates and names x number of programs"""
+    """this creates and names x number of programs
+    """
 
     d = {}
 
     counter = 0
-    
+
     for eachprog in range(number_of_programs):
         d[('prog' + str(counter))] = Program()
         counter += 1
-        
-        
+
     return d
 
 def fitAverage(L):
-    """takes a list of fitnesses and program names and returns the average fitness"""
+    """takes a list of fitnesses and program names and returns the average
+       fitness
+    """
 
     tot = 0
     for eachscore in range(len(L)):
@@ -585,53 +486,4 @@ def fitAverage(L):
 
     avg = (tot*1.0)/len(L)
     return avg
-
-"""fittest:
-0 NExx -> W 4
-0 NxWx -> S 0
-0 Nxxx -> W 4
-0 xExS -> N 1
-0 xExx -> W 4
-0 xxWS -> E 3
-0 xxWx -> S 0
-0 xxxS -> N 3
-0 xxxx -> E 0
-1 NExx -> W 3
-1 NxWx -> E 3
-1 Nxxx -> E 4
-1 xExS -> N 1
-1 xExx -> W 4
-1 xxWS -> N 4
-1 xxWx -> N 3
-1 xxxS -> W 3
-1 xxxx -> W 1
-2 NExx -> W 1
-2 NxWx -> E 4
-2 Nxxx -> W 0
-2 xExS -> N 3
-2 xExx -> S 4
-2 xxWS -> N 3
-2 xxWx -> E 2
-2 xxxS -> E 3
-2 xxxx -> S 1
-3 NExx -> W 1
-3 NxWx -> E 1
-3 Nxxx -> E 1
-3 xExS -> W 1
-3 xExx -> S 1
-3 xxWS -> E 2
-3 xxWx -> E 0
-3 xxxS -> E 4
-3 xxxx -> W 2
-4 NExx -> W 2
-4 NxWx -> S 4
-4 Nxxx -> S 4
-4 xExS -> W 4
-4 xExx -> S 0
-4 xxWS -> N 0
-4 xxWx -> E 2
-4 xxxS -> E 2
-4 xxxx -> N 2
-
-"""
 
