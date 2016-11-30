@@ -22,7 +22,6 @@ import random
 HEIGHT = 25
 WIDTH = 25
 NUMSTATES = 5
-
 STEPS = 2250
 TRIALS = 50
 
@@ -31,7 +30,6 @@ class Program:
 
         self.rules = {}
         self.randomize()
-
 
     def __repr__(self):
         keylist = self.rules.keys()
@@ -154,17 +152,14 @@ class World:
             for col in range( self.width ):
                 s += self.room[row][col]
             s += ' |\n'
-
         s += '+'
         s += '-'*(self.width+2)    # add the bottom of the board
         s += '+'
         s += '\n'
-
         s += '\n'
         return s      # the board is complete, return it
 
     def getCurrentSurroundings(self):
-
         """returns a string in the NExx format as corresponds to the bot's
            current surroundings
         """
@@ -194,7 +189,6 @@ class World:
         return csstring
 
     def step(self):
-
         currCol = self.pcol
         currRow = self.prow
 
@@ -250,7 +244,6 @@ class World:
            picobot doesn't waste computer run time repeating abitrary steps in
            an unfit program
         """
-
         stateatMoment = self.state
         fracCells = self.fractionVisitedCells
         nextMove = self.getCurrentSurroundings()
@@ -284,7 +277,6 @@ def evaluateFitness(program, TRIALS, STEPS):
 
 def menu(numProgs, Generations):
     s = ''
-
     s += '\n\n\n'
     s += '_-_-_-_-' * 3
     s += ' W E L C O M E '
@@ -323,20 +315,15 @@ def GA(numProgramsperGen, Generations):
 
     GenerationCounter = 1
     while GenerationCounter != (Generations+1):
-
         fitEvaluated = []
-
         for eachProgram in programNames:
             name = eachProgram
             rules = dictionary[name]
             fitness = evaluateFitness(rules, TRIALS, 3000)
             x = (fitness, name, rules)
             fitEvaluated.append(x)
-
         fitEvaluated.sort()
-
         maxFitness = max(fitEvaluated)[0]
-
         SumFitness = 0
         for eachTuple in fitEvaluated:
             SumFitness += eachTuple[0]
@@ -410,9 +397,7 @@ def GA(numProgramsperGen, Generations):
 
 def reproduce3(fitEvaluated, avgFit, dictionary, maxFit):
     fitEvaluated.sort()
-
     dictToReturn = {}
-
     goodProgs = []
     listOfNames = []
     for eachTuple in fitEvaluated:
@@ -440,7 +425,6 @@ def reproduce3(fitEvaluated, avgFit, dictionary, maxFit):
 def genName(dictionary):
     names = dictionary.keys()
     names.sort()
-    #print names
     newName = names[-1]
     newName = str(newName[0:-1]) + str(int(newName[-1])+1)
     counter = len(dictionary)
@@ -454,9 +438,7 @@ def createNewGen(genList, aveFit):
        generation
     """
     d = {}
-
     counter = 0
-
     for eachprog in range(len(genList)):
         if genList[eachprog][0] >= aveFit:
             d[genList[eachprog][1]]
@@ -464,15 +446,12 @@ def createNewGen(genList, aveFit):
 def genProgs(number_of_programs):
     """this creates and names x number of programs
     """
-
     d = {}
-
     counter = 0
 
     for eachprog in range(number_of_programs):
         d[('prog' + str(counter))] = Program()
         counter += 1
-
     return d
 
 def fitAverage(L):
