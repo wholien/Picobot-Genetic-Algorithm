@@ -487,3 +487,51 @@ def fitAverage(L):
     avg = (tot*1.0)/len(L)
     return avg
 
+"""
+fittest:
+0 NExx -> W 4
+0 NxWx -> S 0
+0 Nxxx -> W 4
+0 xExS -> N 1
+0 xExx -> W 4
+0 xxWS -> E 3
+0 xxWx -> S 0
+0 xxxS -> N 3
+0 xxxx -> E 0
+1 NExx -> W 3
+1 NxWx -> E 3
+1 Nxxx -> E 4
+1 xExS -> N 1
+1 xExx -> W 4
+1 xxWS -> N 4
+1 xxWx -> N 3
+1 xxxS -> W 3
+1 xxxx -> W 1
+2 NExx -> W 1
+2 NxWx -> E 4
+2 Nxxx -> W 0
+2 xExS -> N 3
+2 xExx -> S 4
+2 xxWS -> N 3
+2 xxWx -> E 2
+2 xxxS -> E 3
+2 xxxx -> S 1
+3 NExx -> W 1
+3 NxWx -> E 1
+3 Nxxx -> E 1
+3 xExS -> W 1
+3 xExx -> S 1
+3 xxWS -> E 2
+3 xxWx -> E 0
+3 xxxS -> E 4
+3 xxxx -> W 2
+4 NExx -> W 2
+4 NxWx -> S 4
+4 Nxxx -> S 4
+4 xExS -> W 4
+4 xExx -> S 0
+4 xxWS -> N 0
+4 xxWx -> E 2
+4 xxxS -> E 2
+4 xxxx -> N 2
+"""
